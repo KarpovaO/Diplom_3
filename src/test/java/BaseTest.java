@@ -31,7 +31,7 @@ public class BaseTest  {
     static WebDriver driver;
     @Before
     public void setup(){
-        RestAssured.baseURI = "https://stellarburgers.nomoreparties.site";
+        RestAssured.baseURI = URLS.siteURL;
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         try {
             driver = getWebDriver("chrome");
@@ -49,15 +49,38 @@ public class BaseTest  {
 
     public static WebDriver getWebDriver(String browserName) throws MalformedURLException {
         ChromeOptions chromeOptions = new ChromeOptions();
+        String driverPath;
+
         switch (browserName) {
             case "chrome":
-                chromeOptions.addArguments("--remote-allow-origins=*","--headless");
-                chromeOptions.setBinary("C:/Program Files/Google/Chrome/Application/chrome.exe");
+                driverPath = System.getenv("CHROME_DRIVER_PATH");
+                if (driverPath == null || driverPath.isEmpty()) {
+                    throw new RuntimeException("Переменная среды CHROME_DRIVER_PATH не установлена");
+                }
+
+                String browserPath = System.getenv("CHROME_BROWSER_PATH");
+                if (browserPath == null || browserPath.isEmpty()) {
+                    throw new RuntimeException("Переменная среды CHROME_BROWSER_PATH не установлена");
+                }
+
+                System.setProperty("webdriver.chrome.driver", driverPath);
+                //chromeOptions.addArguments("--remote-allow-origins=*", "--headless");
+                chromeOptions.addArguments("--remote-allow-origins=*");
+
+                // Путь бинарника браузера
+                chromeOptions.setBinary(browserPath);
+
                 return new ChromeDriver(chromeOptions);
 
             case "yandex":
-                chromeOptions.addArguments("--remote-allow-origins=*","--headless");
-                return new ChromeDriver(chromeOptions.setBinary("C:/Users/user/AppData/Local/Yandex/YandexBrowser/Application/browser.exe"));
+                driverPath = System.getenv("YANDEX_DRIVER_PATH");
+                if (driverPath == null || driverPath.isEmpty()) {
+                    throw new RuntimeException("Переменная среды YANDEX_DRIVER_PATH не установлена");
+                }
+                System.setProperty("webdriver.chrome.driver", driverPath);
+                chromeOptions.addArguments("--remote-allow-origins=*", "--headless");
+                return new ChromeDriver(chromeOptions);
+
             default:
                 throw new RuntimeException("Неподдерживаемый браузер");
         }

@@ -9,7 +9,7 @@ public class LoginTest extends BaseTest {
 
     @Test
     @DisplayName("Вход через Кнопку Личный кабинет")
-    public void LogInTest1() {
+    public void loginPersonalAccountTest() {
         LoginAccBut();
         PojoUser actual_pj = acc.getData();
         assertEquals(pj.getName().toLowerCase(),actual_pj.getName().toLowerCase());
@@ -20,7 +20,7 @@ public class LoginTest extends BaseTest {
     @Test
     @DisplayName("Вход через Кнопку Войти в аккаунт")
 
-    public void LogInTest2() {
+    public void loginAccountTest() {
         LoginEnterAccBut();
         PojoUser actual_pj = acc.getData();
         assertEquals(pj.getName().toLowerCase(),actual_pj.getName().toLowerCase());

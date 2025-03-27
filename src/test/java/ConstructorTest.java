@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 public class ConstructorTest extends BaseTest {
     @Test
     @DisplayName("Тест на переход к разделу Конструктор")
-    public void GoToOrderFeed() {
+    public void goToOrderFeed() {
         LoginAccBut();
         home.goToConstructor();
         assertTrue(home.checkConstructor());
